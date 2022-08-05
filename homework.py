@@ -120,10 +120,11 @@ def send_message(bot, message):
     logging.info('Начат процесс отправки сообщения в Телеграм')
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
-        logging.info(f'Сообщение отправлено: {message}')
     except BotException:
         logging.error('Сообщение не было отправленно')
         return 'Не удалось отправить сообщение.'
+    else:
+        logging.info(f'Сообщение отправлено: {message}')
 
 
 def main():
@@ -145,11 +146,9 @@ def main():
                 send_message(bot, parse_status(homework[0]))
         except Exception as error:
             logging.error(f'Сбой в работе программы: {error}')
-            message = f'Сбой в работе программы: {error}'
-            print(message)
+            send_message(bot, f'Сбой в работе программы: {error}')
         else:
             message = parse_status(homework)
-            print(message)
             send_message(bot, message)
         finally:
             time.sleep(RETRY_TIME)
